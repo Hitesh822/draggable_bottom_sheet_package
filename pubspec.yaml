@@ -1,7 +1,7 @@
 name: draggable_bottom_sheet
-description: A new Flutter package project.
-version: 0.0.3
-homepage: https://github.com/Hitesh822/draggable_bottom_sheet
+description: This is a bottom sheet that is partially visible onto the screen and can be dragged from there into the screen to occupy the fullscreen.
+version: 0.1.0
+homepage: https://github.com/Hitesh822/draggable_bottom_sheet_package.git
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
