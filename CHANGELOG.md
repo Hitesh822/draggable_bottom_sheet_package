@@ -13,3 +13,7 @@
 ## [0.1.0] - 28-May-2020
 
 * Added example tab
+
+## [0.1.1] - 28-May-2020
+
+* Readme changes

@@ -2,7 +2,7 @@
 
 This is a bottom sheet that is partially visible onto the screen and can be dragged from there into the screen to occupy the fullscreen.
 
-![Draggable Bottom Sheet gif](https://github.com/Hitesh822/draggable_bottom_sheet/blob/master/assets/ezgif.com-gif-maker.gif)
+![Draggable Bottom Sheet gif](https://github.com/Hitesh822/draggable_bottom_sheet_package/blob/master/assets/ezgif.com-gif-maker.gif)
 
 ### Get Started
 
