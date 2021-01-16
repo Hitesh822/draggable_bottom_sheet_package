@@ -15,10 +15,11 @@ import package
 `import 'package:draggable_bottom_sheet/draggable_bottom_sheet.dart';`
 
 ### Example
-```
+
+```dart
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:draggable_bottom_sheet/draggable_bottom_sheet.dart
+import 'package:draggable_bottom_sheet/draggable_bottom_sheet.dart';
 
 void main() {
   runApp(MyApp());
@@ -151,14 +152,14 @@ class DraggableBottomSheetExample extends StatelessWidget {
 ### Arguments
 Description of DraggableBottomSheet arguments.
 
-| Argument | Value | Description |
-| ------ | ------ | ------ | 
-| alignment | Alignment | Alignment of the sheet |
-| backgroundWidget | Widget | This widget will hide behind the sheet when expanded. |
-| blurBackground | Boolean | Whether to blur the background while sheet expnasion (true: modal-sheet, false: persistent-sheet) |
-| expandedChild | Widget | Child of expended sheet |
-| expansionExtent | Double | Extent from the min-height to change from previewChild to expandedChild |
-| maxEntent | Double | Max-extent for sheet expansion |
-| minEntent | Double | Min-extent for the sheet, also the original height of the sheet |
-| previewChild | Widget | Child to be displayed when sheet is not expended |
-| scrollDirection | Axis | Scroll direction of the sheet |
+| Argument           | Value     | Description                                                                                       |
+|--------------------|-----------|---------------------------------------------------------------------------------------------------| 
+| alignment          | Alignment | Alignment of the sheet                                                                            |
+| backgroundWidget   | Widget    | This widget will hide behind the sheet when expanded.                                             |
+| blurBackground     | Boolean   | Whether to blur the background while sheet expnasion (true: modal-sheet, false: persistent-sheet) |
+| expandedChild      | Widget    | Child of expended sheet                                                                           |
+| expansionExtent    | Double    | Extent from the min-height to change from previewChild to expandedChild                           |
+| maxEntent          | Double    | Max-extent for sheet expansion                                                                    |
+| minEntent          | Double    | Min-extent for the sheet, also the original height of the sheet                                   |
+| previewChild       | Widget    | Child to be displayed when sheet is not expended                                                  |
+| scrollDirection    | Axis      | Scroll direction of the sheet                                                                     |
