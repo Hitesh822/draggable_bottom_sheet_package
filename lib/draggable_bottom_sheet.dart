@@ -1,6 +1,7 @@
 library draggable_bottom_sheet;
 
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 /// Partially visible bottom sheet that can be dragged into the screen. Provides different views for expanded and collapsed states
@@ -32,29 +33,30 @@ class DraggableBottomSheet extends StatefulWidget {
   /// Scroll direction of the sheet
   final Axis scrollDirection;
 
-  DraggableBottomSheet({
+  const DraggableBottomSheet({
+    Key? key,
     this.alignment = Alignment.bottomLeft,
-    @required this.backgroundWidget,
+    required this.backgroundWidget,
     this.blurBackground = true,
-    @required this.expandedChild,
+    required this.expandedChild,
     this.expansionExtent = 10,
     this.maxExtent = double.infinity,
     this.minExtent = 10,
-    @required this.previewChild,
+    required this.previewChild,
     this.scrollDirection = Axis.vertical,
-  });
+  }) : super(key: key);
 
   @override
   _DraggableBottomSheetState createState() => _DraggableBottomSheetState();
 }
 
 class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
-  double currentHeight;
-  double newHeight;
+  late double currentHeight;
+  late double newHeight;
 
   @override
   void initState() {
-    this.currentHeight = widget.minExtent;
+    currentHeight = widget.minExtent;
     super.initState();
   }
 
@@ -62,9 +64,9 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        widget.backgroundWidget ?? SizedBox(),
+        widget.backgroundWidget,
         (currentHeight - widget.minExtent < 10 || !widget.blurBackground)
-            ? SizedBox()
+            ? const SizedBox()
             : Positioned.fill(
                 child: GestureDetector(
                 onTap: () => setState(() => currentHeight = widget.minExtent),
@@ -94,7 +96,7 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
                 setState(() => currentHeight = newHeight);
               }
             },
-            child: Container(
+            child: SizedBox(
               width: (widget.scrollDirection == Axis.vertical)
                   ? double.infinity
                   : currentHeight,
@@ -112,14 +114,8 @@ class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
                 ),
                 child:
                     (currentHeight - widget.minExtent < widget.expansionExtent)
-                        ? ((widget.previewChild) ??
-                            Container(
-                              color: Theme.of(context).primaryColor,
-                            ))
-                        : ((widget.expandedChild) ??
-                            Container(
-                              color: Theme.of(context).primaryColor,
-                            )),
+                        ? ((widget.previewChild))
+                        : ((widget.expandedChild)),
               ),
             ),
           ),
