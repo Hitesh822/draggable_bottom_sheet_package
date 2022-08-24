@@ -1,3 +1,7 @@
+## [1.0.1] - 24-Aug-2022
+
+* Minor fixes
+
 ## [1.0.0] - 24-Aug-2022
 
 * Migrated to null-safety

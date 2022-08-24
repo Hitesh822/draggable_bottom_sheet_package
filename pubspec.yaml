@@ -1,6 +1,6 @@
 name: draggable_bottom_sheet
 description: This package contains a helper class to create a bottom sheet, which persists on the screen & can be dragged from there to cover the full screen.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/Hitesh822/draggable_bottom_sheet_package.git
 
 environment:

@@ -30,3 +30,8 @@ DraggableBottomSheet(
 | onDragging         | Function  | Callback function when sheet is being dragged                                                     |
 | previewWidget      | Widget    | Widget to show on collapsed sheet                                                                 |
 | useSafeArea        | bool      | Should dialog only display in 'safe' areas of the screen. Default true                            |
+
+### Contributors
+| [![](https://avatars.githubusercontent.com/u/29130291?v=4&size=50)](https://github.com/themisir) | [![](https://avatars.githubusercontent.com/u/495355?v=4&size=50)](https://github.com/jr00n) |
+| -------------- | ------------- |
+| Misir Jafarov  | Jeroen Wolff  |
