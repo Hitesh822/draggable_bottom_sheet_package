@@ -1,126 +1,164 @@
 library draggable_bottom_sheet;
 
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
-/// Partially visible bottom sheet that can be dragged into the screen. Provides different views for expanded and collapsed states
+// Partially visible bottom sheet that can be dragged into the screen. Provides different views for expanded and collapsed states
 class DraggableBottomSheet extends StatefulWidget {
-  /// Alignment of the sheet
+  /// Alignment of the sheet. Default Alignment.bottomCenter
   final Alignment alignment;
 
-  /// This widget will hide behind the sheet when expanded.
+  /// Widget above which draggable sheet will be placed.
   final Widget backgroundWidget;
 
-  /// Whether to blur the background while sheet expnasion (true: modal-sheet false: persistent-sheet)
-  final bool blurBackground;
+  /// Color of the modal barrier. Default Colors.black54
+  final Color barrierColor;
 
-  /// Child of expended sheet
-  final Widget expandedChild;
+  /// Whether tapping on the barrier will dismiss the dialog. Default true
+  /// If false, draggable bottom sheet will act as persistent sheet
+  final bool barrierDismissible;
 
-  /// Extent from the min-height to change from previewChild to expandedChild
+  /// Widget to show on expended sheet
+  final Widget expandedWidget;
+
+  /// Increment [expansionExtent] on [minExtent] to change from [previewWidget] to [expandedWidget]
   final double expansionExtent;
 
-  /// Max-extent for sheet expansion
+  /// Whether the sheet is collapsed initially. Default true.
+  final bool collapsed;
+
+  /// Maximum extent for sheet expansion
   final double maxExtent;
 
-  /// Min-extent for the sheet, also the original height of the sheet
+  /// Minimum extent for the sheet
   final double minExtent;
 
-  /// Child to be displayed when sheet is not expended
-  final Widget previewChild;
+  /// Callback function when sheet is being dragged
+  /// pass current extent (position) as an argument
+  final Function(double) onDragging;
 
-  /// Scroll direction of the sheet
-  final Axis scrollDirection;
+  /// Widget to show on collapsed sheet
+  final Widget previewWidget;
+
+  /// indicate if the dialog should only display in 'safe' areas of the screen. Default true
+  final bool useSafeArea;
 
   const DraggableBottomSheet({
     Key? key,
-    this.alignment = Alignment.bottomLeft,
+    required this.previewWidget,
     required this.backgroundWidget,
-    this.blurBackground = true,
-    required this.expandedChild,
-    this.expansionExtent = 10,
+    required this.expandedWidget,
+    required this.onDragging,
+    this.minExtent = 50.0,
+    this.collapsed = true,
+    this.useSafeArea = true,
+    this.expansionExtent = 10.0,
+    this.barrierDismissible = true,
     this.maxExtent = double.infinity,
-    this.minExtent = 10,
-    required this.previewChild,
-    this.scrollDirection = Axis.vertical,
-  }) : super(key: key);
+    this.barrierColor = Colors.black54,
+    this.alignment = Alignment.bottomCenter,
+  })  : assert(minExtent > 0.0),
+        assert(expansionExtent > 0.0),
+        assert(minExtent + expansionExtent < maxExtent),
+        super(key: key);
 
   @override
-  _DraggableBottomSheetState createState() => _DraggableBottomSheetState();
+  DraggableBottomSheetState createState() => DraggableBottomSheetState();
 }
 
-class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
-  late double currentHeight;
-  late double newHeight;
+class DraggableBottomSheetState extends State<DraggableBottomSheet> {
+  double _currentExtent = 0.0;
 
   @override
   void initState() {
-    currentHeight = widget.minExtent;
     super.initState();
+    _currentExtent = widget.collapsed ? widget.minExtent : widget.maxExtent;
   }
 
   @override
   Widget build(BuildContext context) {
+    return widget.useSafeArea ? SafeArea(child: _body()) : _body();
+  }
+
+  /// body content
+  Widget _body() {
     return Stack(
-      children: <Widget>[
+      children: [
+        // background widget
         widget.backgroundWidget,
-        (currentHeight - widget.minExtent < 10 || !widget.blurBackground)
-            ? const SizedBox()
-            : Positioned.fill(
-                child: GestureDetector(
-                onTap: () => setState(() => currentHeight = widget.minExtent),
-                child: Container(
-                  color: Colors.black.withOpacity(0.5),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                  ),
-                ),
-              )),
-        Align(
-          alignment: widget.alignment,
-          child: GestureDetector(
-            onVerticalDragUpdate: (details) {
-              if (widget.scrollDirection == Axis.horizontal) return;
-              newHeight = currentHeight - details.delta.dy;
-              if (newHeight > widget.minExtent &&
-                  newHeight < widget.maxExtent) {
-                setState(() => currentHeight = newHeight);
-              }
-            },
-            onHorizontalDragUpdate: (details) {
-              if (widget.scrollDirection == Axis.vertical) return;
-              newHeight = currentHeight + details.delta.dx;
-              if (newHeight > widget.minExtent &&
-                  newHeight < widget.maxExtent) {
-                setState(() => currentHeight = newHeight);
-              }
-            },
-            child: SizedBox(
-              width: (widget.scrollDirection == Axis.vertical)
-                  ? double.infinity
-                  : currentHeight,
-              height: (widget.scrollDirection == Axis.horizontal)
-                  ? double.infinity
-                  : currentHeight,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: (widget.scrollDirection == Axis.vertical)
-                      ? double.infinity
-                      : currentHeight,
-                  maxHeight: (widget.scrollDirection == Axis.horizontal)
-                      ? double.infinity
-                      : currentHeight,
-                ),
-                child:
-                    (currentHeight - widget.minExtent < widget.expansionExtent)
-                        ? ((widget.previewChild))
-                        : ((widget.expandedChild)),
-              ),
-            ),
-          ),
-        ),
+        // barrier
+        if (_currentExtent.roundToDouble() > widget.minExtent + 0.1)
+          Positioned.fill(child: _barrier()),
+        // sheet
+        Align(alignment: widget.alignment, child: _sheet()),
       ],
     );
+  }
+
+  /// barrier film between sheet & background widget
+  Widget _barrier() {
+    return IgnorePointer(
+      ignoring: !widget.barrierDismissible,
+      child: GestureDetector(
+        onTap: widget.barrierDismissible
+            ? () => setState(() => _currentExtent = widget.minExtent)
+            : null,
+        child: Container(color: widget.barrierColor),
+      ),
+    );
+  }
+
+  /// draggable bottom sheet
+  Widget _sheet() {
+    return GestureDetector(
+      onVerticalDragUpdate: _onVerticalDragUpdate,
+      onHorizontalDragUpdate: _onHorizontalDragUpdate,
+      child: SizedBox(
+        width: _axis() == Axis.horizontal ? _currentExtent : null,
+        height: _axis() == Axis.horizontal ? null : _currentExtent,
+        child: _currentExtent >= widget.minExtent + widget.expansionExtent
+            ? widget.expandedWidget
+            : widget.previewWidget,
+      ),
+    );
+  }
+
+  /// determine scroll direction based on DraggableBottomSheetPosition
+  Axis _axis() {
+    if (widget.alignment == Alignment.topLeft ||
+        widget.alignment == Alignment.topRight ||
+        widget.alignment == Alignment.topCenter ||
+        widget.alignment == Alignment.bottomLeft ||
+        widget.alignment == Alignment.bottomRight ||
+        widget.alignment == Alignment.bottomCenter) {
+      return Axis.vertical;
+    }
+
+    return Axis.horizontal;
+  }
+
+  /// callback function when sheet is dragged horizontally
+  void _onHorizontalDragUpdate(DragUpdateDetails details) {
+    if (_axis() == Axis.vertical) return;
+
+    // delta dx is positive when dragged towards right &
+    // negative when dragged towards left
+    final newExtent = (_currentExtent + details.delta.dx).roundToDouble();
+    if (newExtent >= widget.minExtent && newExtent <= widget.maxExtent) {
+      setState(() => _currentExtent = newExtent);
+      widget.onDragging(_currentExtent);
+    }
+  }
+
+  /// callback function when sheet is dragged vertically
+  void _onVerticalDragUpdate(DragUpdateDetails details) {
+    if (_axis() == Axis.horizontal) return;
+
+    // delta dy is positive when dragged downward &
+    // negetive when dragged upward
+    final newExtent = (_currentExtent - details.delta.dy).roundToDouble();
+    if (newExtent >= widget.minExtent && newExtent <= widget.maxExtent) {
+      setState(() => _currentExtent = newExtent);
+      widget.onDragging(_currentExtent);
+    }
   }
 }
