@@ -23,7 +23,7 @@ class DraggableBottomSheet extends StatefulWidget {
   /// Sheet expansion animation curve. Default Curves.linear
   final Curve curve;
 
-  /// Duration for sheet expansion animation. Default 300 ms.
+  /// Duration for sheet expansion animation. Default Duration(milliseconds: 0)
   final Duration duration;
 
   /// Widget to show on expended sheet
@@ -63,7 +63,7 @@ class DraggableBottomSheet extends StatefulWidget {
     this.maxExtent = double.infinity,
     this.barrierColor = Colors.black54,
     this.alignment = Alignment.bottomCenter,
-    this.duration = const Duration(milliseconds: 300),
+    this.duration = const Duration(milliseconds: 0),
   })  : assert(minExtent > 0.0),
         assert(expansionExtent > 0.0),
         assert(minExtent + expansionExtent < maxExtent),

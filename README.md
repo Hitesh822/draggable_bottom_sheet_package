@@ -11,6 +11,7 @@ DraggableBottomSheet(
     previewWidget: _previewWidget(),
     expandedWidget: _expandedWidget(),
     backgroundWidget: _backgroundWidget(),
+    duration: const Duration(milliseconds: 10),
     maxExtent: MediaQuery.of(context).size.height * 0.8,
     onDragging: (pos) {},
 ),
@@ -25,7 +26,7 @@ DraggableBottomSheet(
 | barrierDismissible | bool      | Collapse bottom sheet on tap. If false, sheet will act as persistent sheet. Default true.         |
 | collapsed          | bool      | Whether the sheet is collapsed initially. Default true.                                           |
 | curve              | Curve     | Sheet expansion animation curve. Default Curves.linear                                            |
-| duration           | Duration  | Duration for sheet expansion animation. Default Duration(milliseconds: 300)                       |
+| duration           | Duration  | Duration for sheet expansion animation. Default Duration(milliseconds: 0)                         |
 | expandedWidget     | Widget    | Widget to show on expended sheet                                                                  |
 | expansionExtent    | double    | Increment on [minExtent] to change from [previewWidget] to [expandedWidget]                       |
 | maxExtent          | double    | Maximum extent for sheet expansion                                                                |
