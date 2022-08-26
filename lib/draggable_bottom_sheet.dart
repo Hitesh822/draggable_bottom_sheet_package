@@ -13,18 +13,24 @@ class DraggableBottomSheet extends StatefulWidget {
   /// Color of the modal barrier. Default Colors.black54
   final Color barrierColor;
 
-  /// Whether tapping on the barrier will dismiss the dialog. Default true
+  /// Whether tapping on the barrier will dismiss the dialog. Default true.
   /// If false, draggable bottom sheet will act as persistent sheet
   final bool barrierDismissible;
+
+  /// Whether the sheet is collapsed initially. Default true.
+  final bool collapsed;
+
+  /// Sheet expansion animation curve. Default Curves.linear
+  final Curve curve;
+
+  /// Duration for sheet expansion animation. Default 300 ms.
+  final Duration duration;
 
   /// Widget to show on expended sheet
   final Widget expandedWidget;
 
   /// Increment [expansionExtent] on [minExtent] to change from [previewWidget] to [expandedWidget]
   final double expansionExtent;
-
-  /// Whether the sheet is collapsed initially. Default true.
-  final bool collapsed;
 
   /// Maximum extent for sheet expansion
   final double maxExtent;
@@ -51,11 +57,13 @@ class DraggableBottomSheet extends StatefulWidget {
     this.minExtent = 50.0,
     this.collapsed = true,
     this.useSafeArea = true,
+    this.curve = Curves.linear,
     this.expansionExtent = 10.0,
     this.barrierDismissible = true,
     this.maxExtent = double.infinity,
     this.barrierColor = Colors.black54,
     this.alignment = Alignment.bottomCenter,
+    this.duration = const Duration(milliseconds: 300),
   })  : assert(minExtent > 0.0),
         assert(expansionExtent > 0.0),
         assert(minExtent + expansionExtent < maxExtent),
@@ -112,7 +120,9 @@ class DraggableBottomSheetState extends State<DraggableBottomSheet> {
     return GestureDetector(
       onVerticalDragUpdate: _onVerticalDragUpdate,
       onHorizontalDragUpdate: _onHorizontalDragUpdate,
-      child: SizedBox(
+      child: AnimatedContainer(
+        curve: widget.curve,
+        duration: widget.duration,
         width: _axis() == Axis.horizontal ? _currentExtent : null,
         height: _axis() == Axis.horizontal ? null : _currentExtent,
         child: _currentExtent >= widget.minExtent + widget.expansionExtent

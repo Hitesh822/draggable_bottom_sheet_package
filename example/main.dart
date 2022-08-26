@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
           body: DraggableBottomSheet(
             minExtent: 150,
             useSafeArea: false,
+            curve: Curves.easeIn,
             previewWidget: _previewWidget(),
             expandedWidget: _expandedWidget(),
             backgroundWidget: _backgroundWidget(),

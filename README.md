@@ -7,6 +7,7 @@ This package contains a helper class to create a bottom sheet, which persists on
 DraggableBottomSheet(
     minExtent: 150,
     useSafeArea: false,
+    curve: Curves.easeIn,
     previewWidget: _previewWidget(),
     expandedWidget: _expandedWidget(),
     backgroundWidget: _backgroundWidget(),
@@ -22,9 +23,11 @@ DraggableBottomSheet(
 | backgroundWidget   | Widget    | Widget above which draggable sheet will be placed.                                                |
 | barrierColor       | Color     | Color of the modal barrier. Default Colors.black54                                                |
 | barrierDismissible | bool      | Collapse bottom sheet on tap. If false, sheet will act as persistent sheet. Default true.         |
+| collapsed          | bool      | Whether the sheet is collapsed initially. Default true.                                           |
+| curve              | Curve     | Sheet expansion animation curve. Default Curves.linear                                            |
+| duration           | Duration  | Duration for sheet expansion animation. Default Duration(milliseconds: 300)                       |
 | expandedWidget     | Widget    | Widget to show on expended sheet                                                                  |
 | expansionExtent    | double    | Increment on [minExtent] to change from [previewWidget] to [expandedWidget]                       |
-| collapsed          | bool      | Whether the sheet is collapsed initially. Default true.                                           |
 | maxExtent          | double    | Maximum extent for sheet expansion                                                                |
 | minExtent          | double    | Minimum extent for the sheet                                                                      |
 | onDragging         | Function  | Callback function when sheet is being dragged                                                     |
