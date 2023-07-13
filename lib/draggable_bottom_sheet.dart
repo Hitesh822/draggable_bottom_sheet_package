@@ -94,8 +94,7 @@ class DraggableBottomSheetState extends State<DraggableBottomSheet> {
         // background widget
         widget.backgroundWidget,
         // barrier
-        if (_currentExtent.roundToDouble() > widget.minExtent + 0.1)
-          Positioned.fill(child: _barrier()),
+        if (_currentExtent.roundToDouble() > widget.minExtent + 0.1) Positioned.fill(child: _barrier()),
         // sheet
         Align(alignment: widget.alignment, child: _sheet()),
       ],
@@ -107,9 +106,7 @@ class DraggableBottomSheetState extends State<DraggableBottomSheet> {
     return IgnorePointer(
       ignoring: !widget.barrierDismissible,
       child: GestureDetector(
-        onTap: widget.barrierDismissible
-            ? () => setState(() => _currentExtent = widget.minExtent)
-            : null,
+        onTap: widget.barrierDismissible ? () => setState(() => _currentExtent = widget.minExtent) : null,
         child: Container(color: widget.barrierColor),
       ),
     );
@@ -118,6 +115,13 @@ class DraggableBottomSheetState extends State<DraggableBottomSheet> {
   /// draggable bottom sheet
   Widget _sheet() {
     return GestureDetector(
+      onTap: () {
+        if (_currentExtent.roundToDouble() == widget.minExtent) {
+          setState(() => _currentExtent = widget.maxExtent);
+        } else {
+          setState(() => _currentExtent = widget.minExtent);
+        }
+      },
       onVerticalDragUpdate: _onVerticalDragUpdate,
       onHorizontalDragUpdate: _onHorizontalDragUpdate,
       child: AnimatedContainer(
@@ -125,9 +129,7 @@ class DraggableBottomSheetState extends State<DraggableBottomSheet> {
         duration: widget.duration,
         width: _axis() == Axis.horizontal ? _currentExtent : null,
         height: _axis() == Axis.horizontal ? null : _currentExtent,
-        child: _currentExtent >= widget.minExtent + widget.expansionExtent
-            ? widget.expandedWidget
-            : widget.previewWidget,
+        child: _currentExtent >= widget.minExtent + widget.expansionExtent ? widget.expandedWidget : widget.previewWidget,
       ),
     );
   }
